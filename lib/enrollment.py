@@ -14,6 +14,12 @@ class Student:
 
     def get_enrollments(self):
         return self._enrollments.copy()
+    
+    def total_enrollments(self):
+        return len(self._enrollments)
+    
+    def all_enrolled_courses(self):
+        return {enrollment.course for enrollment in self._enrollments}
 
 class Course:
     def __init__(self, title):
@@ -30,6 +36,11 @@ class Course:
     def get_enrollments(self):
         return self._enrollments.copy()
 
+    def total_enrollments(self):
+        return len(self._enrollments)
+
+    def all_enrolled_students(self):
+        return {enrollment.student for enrollment in self._enrollments}
 
 class Enrollment:
     all = []
@@ -45,3 +56,21 @@ class Enrollment:
 
     def get_enrollment_date(self):
         return self._enrollment_date
+    
+    @classmethod
+    def total_enrollments(cls):
+        return len(cls.all)
+
+    @classmethod
+    def enrollments_by_student(cls, student):
+        if isinstance(student, Student):
+            return [enrollment for enrollment in cls.all if enrollment.student == student]
+        else:
+            raise TypeError("student must be an instance of Student")
+
+    @classmethod
+    def enrollments_by_course(cls, course):
+        if isinstance(course, Course):
+            return [enrollment for enrollment in cls.all if enrollment.course == course]
+        else:
+            raise TypeError("course must be an instance of Course")
